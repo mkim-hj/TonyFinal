@@ -18,57 +18,10 @@ Stark = "F3:DA:73:20:77:03"
 IronMan = "ED:01:19:83:2D:F4"
 Tony = "F3:FA:BE:3A:4B:96"
 
-# r = sr.Recognizer()
-# with sr.Microphone() as source:                # use the default microphone as the audio source
-#     audio = r.listen(source)                   # listen for the first phrase and extract it into audio data
-
-# prevTime = 0
-# currTime = 0
-
-def recognizeSpeech():
-	# SPEECH RECOGNITION
-	try:
-		speech = r.recognize(audio)
-		print("You said: " + speech)
-		if "Tony" in speech:
-			print "Activated..."
-			if "light on" in speech:
-				print "Turning On"
-				setARGB(1, 220, 220, 220)
-			elif "turn on the lights" in speech:
-				print "Turning On"
-				setARGB(1, 220, 220, 220)
-			elif "light off" in speech:
-				print "Turning Off"
-				setARGB(0, 0, 0, 0)
-			elif "turn off the lights" in speech:
-				print "Turning Off"
-				setARGB(0, 0, 0, 0)
-			elif "dim" in speech:
-				print "Dimming light"
-				alpha = 127
-			elif "dinner" in speech:
-				print "It's time for dinner!"
-				setARGB(1, 255, 220, 80)
-			RGB = hex(redval)[2:].zfill(2) + hex(greenval)[2:].zfill(2) + hex(blueval)[2:].zfill(2)
-			mycmd = "gatttool "
-
-			myarg = " -b " + Stark + " -t random --char-write --handle=0x0011 --value=" + RGB
-			# myarg = " -b " + Stark + " -t random --char-write --handle=0x0011 --value=" + RGB
-			# myarg = " -b " + Stark + " -t random --char-write --handle=0x0011 --value=" + RGB
-
-			os.system(mycmd + myarg)
-		else:
-			print("Please begin your phrase with 'Tony'")	
-	except LookupError: 
-		print("Could not understand audio")
-
-def setARGB(a, r, g, b):
-	alpha = a
-	redval = r
-	greenval = g
-	blueval = b
-
+lastred = 0
+lastblue = 0
+lastgreen = 0
+lastalpha = 0
 while (1):
 	try:
 		os.system("sudo hciconfig hci0 up")
@@ -80,15 +33,20 @@ while (1):
 		blueval=int(colorObject.blue * alpha)
 
 		print redval, " ", greenval, " ", blueval
-
+		if (lastred == redval and lastgreen == greenval and lastblue==blueval and lastalpha == alpha):
+			pass
 		RGB = hex(redval)[2:].zfill(2) + hex(greenval)[2:].zfill(2) + hex(blueval)[2:].zfill(2)
 		mycmd = "gatttool "
-
+		
 		myarg = " -b " + Stark + " -t random --char-write --handle=0x0011 --value=" + RGB
 		# myarg = " -b " + Stark + " -t random --char-write --handle=0x0011 --value=" + RGB
 		# myarg = " -b " + Stark + " -t random --char-write --handle=0x0011 --value=" + RGB
 
 		os.system(mycmd + myarg)
+		lastred = redval
+		lastgreen = greenval
+		lastblue = blueval
+		lastalpha = alpha
 	except:
 		pass
 
