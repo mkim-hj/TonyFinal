@@ -8,21 +8,30 @@
 #import curses
 import os
 import sys
+import ParsePy
 
-# Change ble_mac to your MAC address
-ble_mac = "F3:DA:73:20:77:03"
-#OR get it from the command line
+ParsePy.APPLICATION_ID = "nfVBFXHTVmVpMr5HHRWl0e3mFk2SDm1hOBoGATxp"
+ParsePy.MASTER_KEY = "i5vvmxea6IBPYRIncjHImfdhoWwUSxYpvRnREx97"
 
+Stark = "F3:DA:73:20:77:03"
+IronMan = "ED:01:19:83:2D:F4"
+Tony = "F3:FA:BE:3A:4B:96"
 
+colorQuery = ParsePy.ParseQuery("ColorObject").limit(1).order("createdAt", decending=True)
+colorObject = colorQuery.fetch()[0]
+alpha = colorObject.alpha / 255
+redval=int(colorObject.red * alpha)
+greenval=int(colorObject.green * alpha)
+blueval=int(colorObject.blue * alpha)
 
-redval=int(255)
-greenval=int(128)
-blueval=int(64)
 RGB = hex(redval)[2:].zfill(2) + hex(greenval)[2:].zfill(2) + hex(blueval)[2:].zfill(2)
 mycmd = "gatttool "
-myarg = " -b " + ble_mac + " -t random --char-write --handle=0x0011 --value=" + RGB
 
-#myarg = " -b " + ble_mac + "random --char-write --handle=0x0011 --value=" + RGB
+myarg = " -b " + Stark + " -t random --char-write --handle=0x0011 --value=" + RGB
+# myarg = " -b " + Stark + " -t random --char-write --handle=0x0011 --value=" + RGB
+# myarg = " -b " + Stark + " -t random --char-write --handle=0x0011 --value=" + RGB
+
+
 os.system(mycmd + myarg)
 
 
