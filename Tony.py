@@ -20,7 +20,7 @@ Tony = "F3:FA:BE:3A:4B:96"
 while (1):
 	colorQuery = ParsePy.ParseQuery("ColorObject").limit(1).order("createdAt", decending=True)
 	colorObject = colorQuery.fetch()[0]
-	alpha = colorObject.alpha / 255
+	alpha = colorObject.alpha / 255.0
 	redval=int(colorObject.red * alpha)
 	greenval=int(colorObject.green * alpha)
 	blueval=int(colorObject.blue * alpha)
