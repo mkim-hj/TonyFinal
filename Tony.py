@@ -25,6 +25,8 @@ while (1):
 	greenval=int(colorObject.green * alpha)
 	blueval=int(colorObject.blue * alpha)
 
+	print redval, " ", greenval, " ", blueval
+
 	RGB = hex(redval)[2:].zfill(2) + hex(greenval)[2:].zfill(2) + hex(blueval)[2:].zfill(2)
 	mycmd = "gatttool "
 
