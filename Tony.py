@@ -71,6 +71,7 @@ def setARGB(a, r, g, b):
 
 while (1):
 	try:
+		os.system("sudo hciconfig hci0 up")
 		colorQuery = ParsePy.ParseQuery("ColorObject").limit(1).order("createdAt", decending=True)
 		colorObject = colorQuery.fetch()[0]
 		alpha = colorObject.alpha / 255.0
